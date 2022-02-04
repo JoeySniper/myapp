@@ -20,7 +20,7 @@ class StoreController extends Controller
         $search = \Request::get('s');
         $store = Store::orderBy('created_at', 'desc')
         ->where('name','LIKE', "%{$search}%")
-        ->paginate(10)
+        ->paginate(15)
         ->toArray();
 
         return array_reverse($store);

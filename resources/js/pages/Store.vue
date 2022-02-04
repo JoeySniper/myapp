@@ -307,7 +307,12 @@ export default {
         },
         AddNew() {
             this.FormShow = true
-
+            this.imagesPreview = window.location.origin + "/assets/images/add_images.png";
+            this.FormProduct.name = ""
+            this.FormProduct.amount = ""
+            this.FormProduct.price_buy = ""
+            this.FormProduct.price_sell = ""
+            this.FormProduct.imageProduct = ""
         },
         Cancel() {
             this.FormShow = false
@@ -382,6 +387,7 @@ export default {
             this.FormProduct.price_buy = ""
             this.FormProduct.price_sell = ""
             this.FormProduct.imageProduct = ""
+            this.imagesPreview = window.location.origin + "/assets/images/add_images.png";
 
             this.FormShow = false
             //ເພື່ອໃຫ້ເພີ່ມໃໝ່ທຸກຄັ້ງ
@@ -399,6 +405,13 @@ export default {
                     this.FormProduct.amount = response.data.amount
                     this.FormProduct.price_buy = response.data.price_buy
                     this.FormProduct.price_sell = response.data.price_sell
+                    // this.FormProduct.imageProduct = response.data.images
+                    if(response.data.images){
+                        this.imagesPreview = window.location.origin + "/assets/images/" + response.data.images;
+                    }else{
+                        this.imagesPreview = window.location.origin + "/assets/images/add_images.png";
+                        
+                    }
                 }).catch((error)=>{
                     console.log(error);
                 })

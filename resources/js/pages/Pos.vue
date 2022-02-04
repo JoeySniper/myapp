@@ -30,21 +30,18 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" style="height: 67vh; overflow:auto;">
             <div class="col-md-3" v-for="list in productData.data" :key="list.id">
-                <div class="card text-center">
-                    <img v-if="list.images" class="card-img-top img-responsive" :src="urlLocation +'/assets/images/'+ list.images"  alt="Card image cap">
-                    <img v-if="!list.images" class="card-img-top img-responsive" :src="urlLocation +'/assets/images/add_images.png'" alt="Card image cap">
+                <div class="card cursor-poiter" @click="AddToOrder(list.id)">
+                    <img v-if="list.images" class="card-img-top img-responsive" :src="urlLocation +'/assets/images/'+ list.images" style="width:100%; height:140px; object-fit: cover; object-position: center;"  alt="Card image cap">
+                    <img v-if="!list.images" class="card-img-top img-responsive" :src="urlLocation +'/assets/images/add_images.png'" style="width:100%; height:140px; object-fit: cover; object-position: center;" alt="Card image cap">
 
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <p class="card-text">{{list.name}}</p>
                         <p class="card-text text-info">{{formatPrice(list.price_sell)}} kip</p>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
 
 
@@ -70,14 +67,17 @@
                     <th>ລາຍການ</th>
                     <th width="120" class="text-center">ລາຄາ</th>
                     <th width="130" class="text-end">
-                      ຍອດລວມ (<i
-                        class="mdi mdi-close-circle text-danger cursor-pointer"
-                      ></i
-                      >)
+                      ຍອດລວມ (<i class="mdi mdi-close-circle text-danger cursor-pointer"></i>)
                     </th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                  <tr v-for="item in ListOrder" :key="item.id">
+                    <td>{{ item.name }}</td>
+                    <td>{{ formatPrice(item.price_sell) }} ກີບ <br> {{item.order_amount}}</td>
+                    <td>{{ formatPrice(item.price_sell*item.order_amount)}} ກີບ</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -96,6 +96,7 @@ export default {
         productData:[],
         SearchProduct:'',
         urlLocation: window.location.origin,
+        ListOrder:[],
     };
   },
 
@@ -116,6 +117,51 @@ export default {
             let val = (value / 1).toFixed(0).replace(",", ".");
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+        AddToOrder(id){
+          let item = this.productData.data.find((i) =>i.id==id);
+            if(this.ListOrder.find((i) => i.id==id)){
+              // alert('ມີໃນລາຍການ')
+              let old_order_amount = this.ListOrder.find((i)=>id==id).order_amount;
+              if(item.amount-old_order_amount>0){
+                this.ListOrder.find((i)=>i.id==id).order_amount = old_order_amount + 1
+              }else{
+                alert('ສິນຄ້າໝົດ')
+              }
+
+            }else{
+              if(item.amount > 0){
+                this.ListOrder.push({
+                  id:item.id,
+                  name:item.name,
+                  price_sell:item.price_sell,
+                  order_amount:1
+                });
+              }else{
+                alert('ບໍ່ມີສິນຄ້າ')
+              }
+            }
+        },
+    //     AddToOrder(id){
+
+    //         let item = this.productData.data.find((i)=>i.id==id);
+    //         if(this.ListOrder.find((i)=>i.id==id)){
+    //                     let old_order_amount = this.ListOrder.find((i)=>i.id==id).order_amount;
+    //                     if((item.amount-old_order_amount)>0){
+    //                         this.ListOrder.find((i)=>i.id==id).order_amount = old_order_amount+1;
+    //                     } else { console.log('loss!')}
+    //                } else {
+    //                    if(item.amount>0){
+    //                         this.ListOrder.push({
+    //                             id: item.id,
+    //                             name: item.name,
+    //                             price_sell: item.price_sell,
+    //                             order_amount: 1
+    //                         });
+    //                     } else { console.log('loss!')}
+    //                }
+
+
+    // },
   },
   created(){
         this.GetAllStore();
