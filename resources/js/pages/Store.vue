@@ -381,6 +381,7 @@ export default {
             this.FormProduct.amount = ""
             this.FormProduct.price_buy = ""
             this.FormProduct.price_sell = ""
+            this.FormProduct.imageProduct = ""
 
             this.FormShow = false
             //ເພື່ອໃຫ້ເພີ່ມໃໝ່ທຸກຄັ້ງ
@@ -390,17 +391,18 @@ export default {
             // // console.log(id)
             // let item = this.FormData.find((i)=>i.id == id)
             // // console.log(item)
-
-            axios.get(`/api/store/edit/${id}`)
-            .then((response)=>{
-                console.log(response)
-                this.FormProduct.name = response.data.name
-                this.FormProduct.amount = response.data.amount
-                this.FormProduct.price_buy = response.data.price_buy
-                this.FormProduct.price_sell = response.data.price_sell
-            }).catch((error)=>{
-                console.log(error);
-            })
+            this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+                axios.get(`/api/store/edit/${id}`)
+                .then((response)=>{
+                    console.log(response)
+                    this.FormProduct.name = response.data.name
+                    this.FormProduct.amount = response.data.amount
+                    this.FormProduct.price_buy = response.data.price_buy
+                    this.FormProduct.price_sell = response.data.price_sell
+                }).catch((error)=>{
+                    console.log(error);
+                })
+            });
 
             this.FormShow = true
 

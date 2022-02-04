@@ -134,7 +134,25 @@ class StoreController extends Controller
     }
 
     public function delete($id){
-        $store = Store::find($id);
-        $store->delete();
+
+        try {
+
+            $user = Store::find($id);
+            $user->delete();
+
+            $success = true;
+            $message = 'delete success!';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $success = false;
+            $message = $ex->getMessage();
+        }
+
+        // response
+        $response = [
+            'success' => $success,
+            'message' => $message,
+        ];
+        return response()->json($response);
+
     }
 }
