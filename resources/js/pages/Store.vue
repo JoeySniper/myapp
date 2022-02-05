@@ -329,27 +329,27 @@ export default {
                 //     price_sell: this.FormProduct.price_sell,
                 // });
 
-                this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+
                     let formData = new FormData();
                     formData.append('name', this.FormProduct.name);
                     formData.append('amount', this.FormProduct.amount);
                     formData.append('price_buy', this.FormProduct.price_buy);
                     formData.append('price_sell', this.FormProduct.price_sell);
                     formData.append('file', this.imageProduct);
-                    axios.post("/api/store/add", formData, {headers:{"Content-Type": "multipart/form-data"}})
-                    .then((response)=>{
-
-                        if(response.data.success){
-                            this.GetAllStore();
-                            console.log('ບັນທຶກຂໍ້ມູນສຳເລັດ');
-                        }else{
-                            console.log(response.data.message);
-                        }
+                    this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+                        axios.post("/api/store/add", formData, {headers:{"Content-Type": "multipart/form-data"}})
+                        .then((response)=>{
+                            if(response.data.success){
+                                this.GetAllStore();
+                                console.log('ບັນທຶກຂໍ້ມູນສຳເລັດ');
+                            }else{
+                                console.log(response.data.message);
+                            }
+                        })
+                        .catch((error)=>{
+                            console.log(error);
+                        });
                     })
-                    .catch((error)=>{
-                        console.log(error);
-                    });
-               })
 
 
             }else{
@@ -360,26 +360,26 @@ export default {
             //    this.FormData.find((i)=>i.id == this.FormID).price_buy = this.FormProduct.price_buy
             //    this.FormData.find((i)=>i.id == this.FormID).price_sell = this.FormProduct.price_sell
 
-                this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+
                     let formData = new FormData();
                     formData.append('name', this.FormProduct.name);
                     formData.append('amount', this.FormProduct.amount);
                     formData.append('price_buy', this.FormProduct.price_buy);
                     formData.append('price_sell', this.FormProduct.price_sell);
                     formData.append('file', this.imageProduct);
-
-                    axios.post(`/api/store/update/${this.FormID}`, formData, {headers:{"Content-Type": "multipart/form-data"}})
-                    .then((response)=>{
-                            this.GetAllStore();
-                        // if((response.data.success)){
-                        //     this.GetAllStore();
-                        // } else{
-                        //     console.log(response.data.message);
-                        // }
-                    }).catch((error) => {
-                        console.log(error);
+                    this.$axios.get("/sanctum/csrf-cookie").then((response)=>{
+                        axios.post(`/api/store/update/${this.FormID}`, formData, {headers:{"Content-Type": "multipart/form-data"}})
+                        .then((response)=>{
+                                this.GetAllStore();
+                            // if((response.data.success)){
+                            //     this.GetAllStore();
+                            // } else{
+                            //     console.log(response.data.message);
+                            // }
+                        }).catch((error) => {
+                            console.log(error);
+                        });
                     });
-                });
             }
 
             this.FormProduct.name = ""
@@ -410,7 +410,7 @@ export default {
                         this.imagesPreview = window.location.origin + "/assets/images/" + response.data.images;
                     }else{
                         this.imagesPreview = window.location.origin + "/assets/images/add_images.png";
-                        
+
                     }
                 }).catch((error)=>{
                     console.log(error);
